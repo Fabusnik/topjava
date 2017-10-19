@@ -15,6 +15,7 @@ import java.util.*;
  */
 public class UserMealsUtil {
     public static void main(String[] args) {
+
         List<UserMeal> mealList = Arrays.asList(
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
@@ -26,7 +27,7 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 29, 13, 0), "Обед", 520),
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 29, 20, 0), "Ужин", 510)
         );
-        getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(14, 0), 2000);
+        getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
 //        .toLocalDate();
 //        .toLocalTime();
     }
@@ -40,17 +41,14 @@ public class UserMealsUtil {
         List<UserMealWithExceed> exceedList = new ArrayList<>();
 
         //Считаем каллории
-        for (UserMeal iter : mealList) {
-            if (caloriesCount.containsKey(iter.getDateTime().toLocalDate())) {
-                caloriesCount.put(iter.getDateTime().toLocalDate(), caloriesCount.get(iter.getDateTime().toLocalDate()) + iter.getCalories());
-            } else
-                caloriesCount.put(iter.getDateTime().toLocalDate(), iter.getCalories());
-        }
+        mealList.forEach(iter -> caloriesCount.merge(iter.getDateTime().toLocalDate()
+                , iter.getCalories()
+                , (a, b) -> a + b));
 
         //Пишем в выходной лист все что входит во временной промежуток, и устанавливаем флаг превышения калорий за день
         for (UserMeal iter : mealList) {
             boolean exceed;
-            exceed = caloriesCount.get(iter.getDateTime().toLocalDate()) > caloriesPerDay ? true : false;
+            exceed = caloriesCount.get(iter.getDateTime().toLocalDate()) > caloriesPerDay;
             if (TimeUtil.isBetween(iter.getDateTime().toLocalTime(), startTime, endTime))
                 exceedList.add(new UserMealWithExceed(iter.getDateTime(), iter.getDescription(), iter.getCalories(), exceed));
         }
