@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -37,21 +38,17 @@ public class UserMealsUtil {
         // Map для подсчета каллорий за день
         Map<LocalDate, Integer> caloriesCount = new HashMap<>();
 
-        // Выходной лист
-        List<UserMealWithExceed> exceedList = new ArrayList<>();
 
         //Считаем каллории
         mealList.forEach(iter -> caloriesCount.merge(iter.getDateTime().toLocalDate()
                 , iter.getCalories()
                 , (a, b) -> a + b));
 
-        //Пишем в выходной лист все что входит во временной промежуток, и устанавливаем флаг превышения калорий за день
-        for (UserMeal iter : mealList) {
-            boolean exceed;
-            exceed = caloriesCount.get(iter.getDateTime().toLocalDate()) > caloriesPerDay;
-            if (TimeUtil.isBetween(iter.getDateTime().toLocalTime(), startTime, endTime))
-                exceedList.add(new UserMealWithExceed(iter.getDateTime(), iter.getDescription(), iter.getCalories(), exceed));
-        }
+        // Выходной лист
+        List<UserMealWithExceed> exceedList = mealList.stream()
+                .filter(iter -> TimeUtil.isBetween(iter.getDateTime().toLocalTime(), startTime, endTime))
+                .map(iter -> new UserMealWithExceed(iter.getDateTime(), iter.getDescription(), iter.getCalories(), caloriesCount.get(iter.getDateTime().toLocalDate()) > caloriesPerDay))
+                .collect(Collectors.toList());
 
         return exceedList;
     }
