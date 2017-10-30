@@ -35,16 +35,16 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
-        // Map для подсчета каллорий за день
+        // Map for count caloriesPerDay
         Map<LocalDate, Integer> caloriesCount = new HashMap<>();
 
 
-        //Считаем каллории
+        //Count calories
         mealList.forEach(iter -> caloriesCount.merge(iter.getDateTime().toLocalDate()
                 , iter.getCalories()
                 , (a, b) -> a + b));
 
-        // Выходной лист
+        //List UserMealWithExceed (using TimeUtil.isBetween())
         List<UserMealWithExceed> exceedList = mealList.stream()
                 .filter(iter -> TimeUtil.isBetween(iter.getDateTime().toLocalTime(), startTime, endTime))
                 .map(iter -> new UserMealWithExceed(iter.getDateTime(), iter.getDescription(), iter.getCalories(), caloriesCount.get(iter.getDateTime().toLocalDate()) > caloriesPerDay))
