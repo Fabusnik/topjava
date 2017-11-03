@@ -1,0 +1,16 @@
+table {
+    border-collapse: collapse; /* Убираем двойные линии между ячейками */
+    width: 40%; /* Ширина таблицы */
+    text-align: center;
+}
+th {
+    background: #fc0; /* Цвет фона ячейки */
+
+}
+td {
+    background: #fff; /* Цвет фона ячеек */
+}
+th, td {
+    border: 1px solid black; /* Параметры рамки */
+    padding: 4px; /* Поля вокруг текста */
+}
