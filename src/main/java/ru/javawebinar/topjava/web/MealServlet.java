@@ -42,7 +42,7 @@ public class MealServlet extends HttpServlet {
         log.debug("redirect to meal");
 
         List<MealWithExceed> mealsWithExceeded =
-                MealsUtil.getFilteredWithExceeded(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
+                MealsUtil.getFilteredWithExceeded(meals, 2000);
 
         request.setAttribute("list", mealsWithExceeded);
         //request.setAttribute("list", meals);
