@@ -3,6 +3,8 @@ table {
     width: 40%; /* Ширина таблицы */
     text-align: center;
 }
+
+
 th {
     background: #fc0; /* Цвет фона ячейки */
 
@@ -13,4 +15,11 @@ td {
 th, td {
     border: 1px solid black; /* Параметры рамки */
     padding: 4px; /* Поля вокруг текста */
+}
+
+table.edit,
+table.edit th,
+table.edit td {
+    border: none;
+    padding: 3px;
 }
