@@ -35,10 +35,10 @@
         <td>${exceedMeals.description}</td>
         <td>${exceedMeals.calories}</td>
         <td style="color: black">
-            <a href="">Edit</a>
+            <a href="meal.jsp"/>Edit</a>
         </td>
         <td style="color: black">
-            <a href="">Delete</a>
+            <a href="meals?action=delete&mealId=<c:out value="${exceedMeals.id}"/>">Delete</a>
         </td>
         </tr>
 
@@ -46,6 +46,6 @@
 </table>
 <br/>
 <br/>
-<a href="meal.jsp">Add</a>
+<h3><a href="meal.jsp">Add</a></h3>
 </body>
 </html>

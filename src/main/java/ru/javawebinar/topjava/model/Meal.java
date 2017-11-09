@@ -8,9 +8,9 @@ public class Meal {
 
     private static int idCount = 0;
     private final int id;
-    private final LocalDateTime dateTime;
-    private final String description;
-    private final int calories;
+    private LocalDateTime dateTime;
+    private String description;
+    private int calories;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this.id = ++idCount;
@@ -19,9 +19,14 @@ public class Meal {
         this.calories = calories;
     }
 
+    public Meal() {
+        this.id = ++idCount;
+    }
+
     public int getId() {
         return id;
     }
+
 
     public LocalDateTime getDateTime() {
         return dateTime;
@@ -31,8 +36,18 @@ public class Meal {
         return description;
     }
 
-    public int getCalories() {
-        return calories;
+    public int getCalories() { return calories; }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
     }
 
     public LocalDate getDate() {
@@ -42,4 +57,6 @@ public class Meal {
     public LocalTime getTime() {
         return dateTime.toLocalTime();
     }
+
+
 }

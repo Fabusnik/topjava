@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web;
 
 
 import org.slf4j.Logger;
+import ru.javawebinar.topjava.dao.MealDao;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -21,31 +22,60 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
+    private MealDao mealDao = MealDao.getInstance();
     private static final Logger log = getLogger(UserServlet.class);
-    List<Meal> meals = Arrays.asList(
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 10, 0), "Завтрак", 1200),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 13, 0), "Обед", 550),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 20, 0), "Ужин", 510),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 28, 10, 0), "Завтрак", 900),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 28, 13, 0), "Обед", 450),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 28, 20, 0), "Ужин", 310)
-    );
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meal");
+        //  String forward="";
+        String action = request.getParameter("action");
+
+        if (action == null) {
+            List<MealWithExceed> mealsWithExceeded =
+                    MealsUtil.getFilteredWithExceeded(MealDao.meals, 2000);
+            request.setAttribute("list", mealsWithExceeded);
+        } else if (action.equalsIgnoreCase("delete")) {
+            int mealId = Integer.parseInt(request.getParameter("mealId"));
+            mealDao.deleteMeal(mealId);
+            List<MealWithExceed> mealsWithExceeded =
+                    MealsUtil.getFilteredWithExceeded(MealDao.meals, 2000);
+
+            request.setAttribute("list", mealsWithExceeded);
+        } else if (action.equalsIgnoreCase("edit")) {
+            int mealId = Integer.parseInt(request.getParameter("mealId"));
+            for (Meal iter : MealDao.meals){
+                if (iter.getId() == mealId) {
+                    iter.setCalories(1);
+                    mealDao.updateMeal(iter);
+                    log.debug("Edit meal. detail: "+iter);
+                    break;
+                }
+            }
+
+            List<MealWithExceed> mealsWithExceeded =
+                    MealsUtil.getFilteredWithExceeded(MealDao.meals, 2000);
+            request.setAttribute("list", mealsWithExceeded);
+        }
+
+        //response.sendRedirect("meals");
+        request.getRequestDispatcher("meals.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Meal meal = new Meal();
+        meal.setDateTime(LocalDateTime.parse(request.getParameter("data")));
+        meal.setDescription(request.getParameter("description"));
+        meal.setCalories(Integer.parseInt(request.getParameter("calories")));
+
+        MealDao.meals.add(meal);
 
         List<MealWithExceed> mealsWithExceeded =
-                MealsUtil.getFilteredWithExceeded(meals, 2000);
+                MealsUtil.getFilteredWithExceeded(MealDao.meals, 2000);
 
         request.setAttribute("list", mealsWithExceeded);
-        //request.setAttribute("list", meals);
         request.getRequestDispatcher("meals.jsp").forward(request,response);
     }
 }
