@@ -8,27 +8,40 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
-public class MockUserRepositoryImpl implements UserRepository {
-    private static final Logger log = LoggerFactory.getLogger(MockUserRepositoryImpl.class);
+public class InMemoryUserRepositoryImpl implements UserRepository {
+    private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
+    private Map<Integer, User> repository = new ConcurrentHashMap<>();
+    private AtomicInteger counter = new AtomicInteger(0);
 
     @Override
     public boolean delete(int id) {
+       if (!repository.containsKey(id)){
+           return false;
+       }
         log.info("delete {}", id);
+        repository.remove(id);
         return true;
     }
 
     @Override
     public User save(User user) {
+        if (user.isNew()){
+            user.setId(counter.incrementAndGet());
+        }
+        repository.put(user.getId(), user);
         log.info("save {}", user);
         return user;
     }
 
     @Override
     public User get(int id) {
-        log.info("get {}", id);
-        return null;
+        log.info("get {}", repository.get(id));
+        return repository.get(id);
     }
 
     @Override
