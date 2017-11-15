@@ -24,7 +24,7 @@ public class SpringMain {
             adminUserController.getAll();
 
             adminUserController.getByMail("alex");
-            mealRestController.get(1);
+           // mealRestController.get(1);
             mealRestController.getAll();
 
         }

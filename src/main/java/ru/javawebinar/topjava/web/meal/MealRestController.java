@@ -17,8 +17,8 @@ public class MealRestController extends AbstractMealController {
     }
 
     @Override
-    public Meal get(int id) {
-        return super.get(id);
+    public Meal get(Integer userId, int id) {
+        return super.get(userId, id);
     }
 
     @Override

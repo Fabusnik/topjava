@@ -21,9 +21,9 @@ abstract public class AbstractMealController {
         return service.getAll(AuthorizedUser.id());
     }
 
-    public Meal get(int id){
+    public Meal get(Integer userId, int id){
         log.info("get {}", id);
-        return service.get(AuthorizedUser.id(), id);
+        return service.get(userId, id);
     }
 
     public void delete(int id){

@@ -4,9 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,13 +50,18 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public List<Meal> getAll(Integer userId) {
+    public List<MealWithExceed> getAll(Integer userId) {
         List<Meal> mealList = repository.getAll().stream()
                 .filter(iter -> iter.getUserId().equals(userId))
                 .collect(Collectors.toList());
-        for (Meal iter : mealList)
-            log.info("getAll {}",iter);
-        return mealList;
+        List<MealWithExceed> mealWithExceeds = MealsUtil.getWithExceeded(mealList, AuthorizedUser.getCaloriesPerDay());
+
+        Collections.sort(mealWithExceeds, (o1, o2) ->
+                o1.getDateTime().compareTo(o1.getDateTime()));
+
+        for (MealWithExceed iter : mealWithExceeds)
+            log.info("getAll {}", iter);
+        return mealWithExceeds;
 
     }
 }
