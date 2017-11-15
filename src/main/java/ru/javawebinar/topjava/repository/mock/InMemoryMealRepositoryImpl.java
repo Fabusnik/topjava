@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Collection;
 import java.util.Map;
@@ -37,9 +38,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Meal get(int id) {
+    public Meal get(Integer userId, int id) throws NotFoundException{
         log.info("get {}",repository.get(id));
-        return repository.get(id);
+        return repository.get(id).getUserId().equals(userId) ? repository.get(id) : null;
     }
 
     @Override

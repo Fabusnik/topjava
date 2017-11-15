@@ -25,12 +25,16 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean delete(int id) {
-        if (!repository.containsKey(id)) {
+        /*if (!repository.containsKey(id)) {
             return false;
         }
         log.info("delete {}", id);
+
         repository.remove(id);
-        return true;
+        return true;*/
+        log.info("delete {}", id);
+        return repository.remove(id) == null ? false : true;
+
     }
 
     @Override
@@ -69,12 +73,11 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        for (Map.Entry<Integer, User> iter : repository.entrySet()) {
-            if (iter.getValue().getEmail().equals(email)) {
-                log.info("user by email {}", iter);
-                return iter.getValue();
-            }
-        }
-        return null;
+
+        return repository.values().stream()
+                .filter(iter -> email.equalsIgnoreCase(iter.getEmail()))
+                .findFirst()
+                .orElse(null);
+
     }
 }
