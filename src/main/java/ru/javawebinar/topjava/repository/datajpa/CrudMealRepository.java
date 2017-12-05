@@ -18,17 +18,18 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Transactional
     Meal save(Meal meal);
 
-    @Query("select m from Meal m where m.id=:id and m.user.id=:userId")
-    Optional<Meal> findById(@Param("id") Integer id, @Param("userId") int userId);
+    //@Query("select m from Meal m where m.id=:id and m.user.id=:userId")
+    //Optional<Meal> findByIdAndUserId(@Param("id") Integer id, @Param("userId") int userId);
+    Optional<Meal> findByIdAndUserId(Integer id, int userId);
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Meal m WHERE m.id =:id AND m.user.id=:userId")
-    int delete(@Param("id") int id, @Param("userId") int userId);
+    //@Query("DELETE FROM Meal m WHERE m.id =:id AND m.user.id=:userId")
+    int deleteMealByIdAndUserId(int id, int userId);
 
 
-    @Query("SELECT m from Meal m where m.user.id=:userId ORDER BY m.dateTime DESC ")
-    List<Meal> findAll(@Param("userId") int userId);
+    //@Query("SELECT m from Meal m where m.user.id=:userId ORDER BY m.dateTime DESC ")
+    List<Meal> findMealByUserIdOrderByDateTimeDesc(@Param("userId") int userId);
 
     @Query("select m from Meal m where m.user.id=:userId AND m.dateTime>=:startDateTime and m.dateTime<=:endDateTime order by m.dateTime desc")
     List<Meal> findBetween(@Param("startDateTime")LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime, @Param("userId") Integer userId);

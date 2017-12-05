@@ -2,13 +2,9 @@ package ru.javawebinar.topjava.service;
 
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
-import ru.javawebinar.topjava.ActiveDbProfileResolver;
 
-
-//@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-@ActiveProfiles({"postgres", "datajpa"})
-public class MealServiceTest extends AbstractServiceTest {
-
+@ActiveProfiles({"postgres", "jpa"})
+public class MealServiceJpaTest extends AbstractServiceTest{
     @Test
     public void testDelete() throws Exception {
         super.testDelete();
@@ -26,27 +22,27 @@ public class MealServiceTest extends AbstractServiceTest {
 
     @Test
     public void testGet() throws Exception {
-       super.testGet();
+        super.testGet();
     }
 
     @Test
     public void testGetNotFound() throws Exception {
-       super.testGetNotFound();
+        super.testGetNotFound();
     }
 
     @Test
     public void testUpdate() throws Exception {
-       super.testUpdate();
+        super.testUpdate();
     }
 
     @Test
     public void testUpdateNotFound() throws Exception {
-       super.testUpdateNotFound();
+        super.testUpdateNotFound();
     }
 
     @Test
     public void testGetAll() throws Exception {
-       super.testGetAll();
+        super.testGetAll();
     }
 
     @Test

@@ -32,17 +32,17 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return crudRepository.delete(id, userId) != 0;
+        return crudRepository.deleteMealByIdAndUserId(id, userId) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        return crudRepository.findById(id, userId).orElse(null);
+        return crudRepository.findByIdAndUserId(id, userId).orElse(null);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return crudRepository.findAll(userId);
+        return crudRepository.findMealByUserIdOrderByDateTimeDesc(userId);
     }
 
     @Override
