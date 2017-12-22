@@ -26,7 +26,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
  */
 
 @Controller
-public class MealController {
+public class JspMealController {
 
     @Autowired
     private MealService service;

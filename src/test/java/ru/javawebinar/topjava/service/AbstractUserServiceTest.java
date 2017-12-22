@@ -48,8 +48,10 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Before
     @Profile({DATAJPA, JPA})
     public void setUp() throws Exception {
-        cacheManager.getCache("users").clear();
-        jpaUtil.clear2ndLevelHibernateCache();
+            cacheManager.getCache("users").clear();
+            if (jpaUtil != null) {
+                jpaUtil.clear2ndLevelHibernateCache();
+            }
     }
 
 
@@ -92,6 +94,11 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     public void getByEmail() throws Exception {
         User user = service.getByEmail("user@yandex.ru");
         assertMatch(user, USER);
+    }
+
+    @Test
+    public void getRoles() throws Exception{
+        assertMatch(ADMIN, Role.ROLE_ADMIN, Role.ROLE_USER);
     }
 
     @Test
