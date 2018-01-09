@@ -1,3 +1,14 @@
+function updateTableByData() {
+    $.ajax({
+        type:"POST",
+        url:ajaxUrl+'filter',
+        data:$('#filter').serialize(),
+        success: function (data) {
+            datatableApi.clear().rows.add(data).draw();
+        }
+    });
+}
+
 function makeEditable() {
     $(".delete").click(function () {
         deleteRow($(this).attr("id"));
@@ -5,6 +16,11 @@ function makeEditable() {
 
     $("#detailsForm").submit(function () {
         save();
+        return false;
+    });
+
+    $("#filter").submit(function () {
+        updateTableByData();
         return false;
     });
 
