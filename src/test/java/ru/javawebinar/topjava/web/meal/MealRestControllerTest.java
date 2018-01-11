@@ -20,6 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.TestUtil.contentJson;
 import static ru.javawebinar.topjava.TestUtil.contentJsonArray;
+import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
+import static ru.javawebinar.topjava.UserTestData.ADMIN;
 import static ru.javawebinar.topjava.UserTestData.USER;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
@@ -32,7 +34,18 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGet() throws Exception {
-        mockMvc.perform(get(REST_URL + MEAL1_ID))
+        mockMvc.perform(get(REST_URL + MEAL1_ID)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(MEAL1));
+    }
+
+    @Test
+    public void testGetUnauthorized() throws Exception {
+        mockMvc.perform(get(REST_URL + MEAL1_ID)
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -41,7 +54,8 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL + MEAL1_ID))
+        mockMvc.perform(delete(REST_URL + MEAL1_ID)
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isNoContent());
         assertMatch(service.getAll(START_SEQ), MEAL6, MEAL5, MEAL4, MEAL3, MEAL2);
     }
@@ -51,7 +65,8 @@ public class MealRestControllerTest extends AbstractControllerTest {
         Meal updated = getUpdated();
 
         mockMvc.perform(put(REST_URL + MEAL1_ID).contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
+                .content(JsonUtil.writeValue(updated))
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk());
 
         assertMatch(service.get(MEAL1_ID, START_SEQ), updated);
@@ -61,6 +76,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
     public void testCreate() throws Exception {
         Meal created = getCreated();
         ResultActions action = mockMvc.perform(post(REST_URL)
+                .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(created)));
 
@@ -73,7 +89,8 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetAll() throws Exception {
-        mockMvc.perform(get(REST_URL))
+        mockMvc.perform(get(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -84,7 +101,8 @@ public class MealRestControllerTest extends AbstractControllerTest {
     public void testFilter() throws Exception {
         mockMvc.perform(get(REST_URL + "filter")
                 .param("startDate", "2015-05-30").param("startTime", "07:00")
-                .param("endDate", "2015-05-31").param("endTime", "11:00"))
+                .param("endDate", "2015-05-31").param("endTime", "11:00")
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(contentJsonArray(
@@ -94,7 +112,8 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testFilterAll() throws Exception {
-        mockMvc.perform(get(REST_URL + "filter?startDate=&endTime="))
+        mockMvc.perform(get(REST_URL + "filter?startDate=&endTime=")
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(contentJson(MealsUtil.getWithExceeded(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1), USER.getCaloriesPerDay())));
