@@ -14,7 +14,28 @@ function clearFilter() {
     $.get(ajaxUrl, updateTableByData);
 }
 
+// $(function () {
+//     $('#startDate').datepicker("show");
+//     $('#startTime').timepicker();
+//     $('#endDate').datepicker({
+//         locale: 'ru'
+//     });
+//     $('#endTime').timepicker();
+// });
+
+
+
 $(function () {
+
+    $(function () {
+        $('#startDate').datepicker("show");
+        $('#startTime').timepicker();
+        $('#endDate').datepicker({
+            locale: 'ru'
+        });
+        $('#endTime').timepicker();
+    });
+
     datatableApi = $("#datatable").DataTable({
         "ajax": {
             "url": ajaxUrl,
@@ -24,15 +45,15 @@ $(function () {
         "info": true,
         "columns": [
             {
-                "data": "dateTime",
-                "render": function (date, type, row) {
-                    if (type === "display") {
-                        var data = new Date(date);
-                        var option = {hour: 'numeric', minute: 'numeric'};
-                        return data.toLocaleDateString() + " " + data.toLocaleTimeString('en-GB', option);
-                    }
-                    return date;
-                }
+                "data": "dateTime"
+                // "render": function (date, type, row) {
+                //     if (type === "display") {
+                //         var data = new Date(date);
+                //         var option = {hour: 'numeric', minute: 'numeric'};
+                //         return data.toLocaleDateString() + " " + data.toLocaleTimeString('en-GB',option);
+                //     }
+                //     return date;
+                // }
             },
             {
                 "data": "description"

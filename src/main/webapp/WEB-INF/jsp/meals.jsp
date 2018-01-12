@@ -5,8 +5,10 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
+<%--<link rel="stylesheet" href="webjars/datetimepicker/2.5.11/jquery.datetimepicker.css" />--%>
 <script type="text/javascript" src="resources/js/datatablesUtil.js" defer></script>
 <script type="text/javascript" src="resources/js/mealDatatables.js" defer></script>
+<%--<script type="text/javascript" src="webjars/datetimepicker/2.5.11/jquery.datetimepicker.js" defer></script>--%>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <div class="jumbotron">
@@ -23,14 +25,14 @@
                                         code="meal.startDate"/>:</label>
 
                                 <div class="col-sm-4">
-                                    <input class="form-control" type="date" name="startDate" id="startDate">
+                                    <input class="form-control" type="text" name="startDate" id="startDate">
                                 </div>
 
                                 <label class="control-label col-sm-3" for="startTime"><spring:message
                                         code="meal.startTime"/>:</label>
 
                                 <div class="col-sm-3">
-                                    <input class="form-control" type="time" name="startTime" id="startTime">
+                                    <input class="form-control" type="text" name="startTime" id="startTime">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -38,14 +40,14 @@
                                         code="meal.endDate"/>:</label>
 
                                 <div class="col-sm-4">
-                                    <input class="form-control" type="date" name="endDate" id="endDate">
+                                    <input class="form-control" type="text" name="endDate" id="endDate">
                                 </div>
 
                                 <label class="control-label col-sm-3" for="endTime"><spring:message
                                         code="meal.endTime"/>:</label>
 
                                 <div class="col-sm-3">
-                                    <input class="form-control" type="time" name="endTime" id="endTime">
+                                    <input class="form-control" type="text" name="endTime" id="endTime">
                                 </div>
                             </div>
                         </form>
@@ -76,23 +78,23 @@
             </tr>
             </thead>
             <%--<c:forEach items="${meals}" var="meal">--%>
-                <%--<jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>--%>
-                <%--<tr class="${meal.exceed ? 'exceeded' : 'normal'}">--%>
-                    <%--<td>--%>
-                            <%--&lt;%&ndash;${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}&ndash;%&gt;--%>
-                            <%--&lt;%&ndash;<%=TimeUtil.toString(meal.getDateTime())%>&ndash;%&gt;--%>
-                            <%--&lt;%&ndash;${fn:replace(meal.dateTime, 'T', ' ')}&ndash;%&gt;--%>
-                            <%--${fn:formatDateTime(meal.dateTime)}--%>
-                    <%--</td>--%>
-                    <%--<td>${meal.description}</td>--%>
-                    <%--<td>${meal.calories}</td>--%>
-                    <%--<td><a onclick="updateRow(${meal.id})">--%>
-                        <%--<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>--%>
-                    <%--</a></td>--%>
-                    <%--<td><a onclick="deleteRow(${meal.id})">--%>
-                        <%--<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>--%>
-                    <%--</a></td>--%>
-                <%--</tr>--%>
+            <%--<jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>--%>
+            <%--<tr class="${meal.exceed ? 'exceeded' : 'normal'}">--%>
+            <%--<td>--%>
+            <%--&lt;%&ndash;${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}&ndash;%&gt;--%>
+            <%--&lt;%&ndash;<%=TimeUtil.toString(meal.getDateTime())%>&ndash;%&gt;--%>
+            <%--&lt;%&ndash;${fn:replace(meal.dateTime, 'T', ' ')}&ndash;%&gt;--%>
+            <%--${fn:formatDateTime(meal.dateTime)}--%>
+            <%--</td>--%>
+            <%--<td>${meal.description}</td>--%>
+            <%--<td>${meal.calories}</td>--%>
+            <%--<td><a onclick="updateRow(${meal.id})">--%>
+            <%--<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>--%>
+            <%--</a></td>--%>
+            <%--<td><a onclick="deleteRow(${meal.id})">--%>
+            <%--<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>--%>
+            <%--</a></td>--%>
+            <%--</tr>--%>
             <%--</c:forEach>--%>
         </table>
     </div>
@@ -114,7 +116,8 @@
                                 code="meal.dateTime"/></label>
 
                         <div class="col-xs-9">
-                            <input type="datetime-local" class="form-control" id="dateTime" name="dateTime"
+                            <%--<input id="dateTime" type="datetime-local" name="dateTime" placeholder="<spring:message code="meal.dateTime"/>">--%>
+                            <input type="text" class="form-control" id="dateTime" name="dateTime"
                                    placeholder="<spring:message code="meal.dateTime"/>">
                         </div>
                     </div>
@@ -151,7 +154,7 @@
 
 </body>
 
-<script type="text/javascript">
+<script type="text/javascript" defer>
     var i18n = [];
     i18n["addTitle"] = '<spring:message code="meal.add"/>';
     i18n["editTitle"] = '<spring:message code="meal.edit"/>';
@@ -159,5 +162,18 @@
     <c:forEach var="key" items='<%=new String[]{"common.deleted","common.saved"}%>'>
     i18n["${key}"] = "<spring:message code="${key}"/>";
     </c:forEach>
+
+    $(document).ready(function () {
+
+
+        $('#startDate').datepicker("show");
+        $('#startTime').timepicker();
+        $('#endDate').datepicker({
+            locale: 'ru'
+        });
+        $('#endTime').timepicker();
+    });
 </script>
+
+
 </html>
