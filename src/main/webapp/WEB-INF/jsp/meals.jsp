@@ -5,10 +5,11 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
-<%--<link rel="stylesheet" href="webjars/datetimepicker/2.5.11/jquery.datetimepicker.css" />--%>
+
 <script type="text/javascript" src="resources/js/datatablesUtil.js" defer></script>
 <script type="text/javascript" src="resources/js/mealDatatables.js" defer></script>
-<%--<script type="text/javascript" src="webjars/datetimepicker/2.5.11/jquery.datetimepicker.js" defer></script>--%>
+
+
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <div class="jumbotron">
@@ -163,17 +164,17 @@
     i18n["${key}"] = "<spring:message code="${key}"/>";
     </c:forEach>
 
-    $(document).ready(function () {
-
-
-        $('#startDate').datepicker("show");
-        $('#startTime').timepicker();
-        $('#endDate').datepicker({
-            locale: 'ru'
-        });
-        $('#endTime').timepicker();
-    });
 </script>
+
+<script type="text/javascript" src="resources/js/ui.js" defer></script>
+
+<%--<script type="text/javascript" defer>--%>
+    <%--$(function () {--%>
+        <%--$('#startTime').datetimepicker({--%>
+            <%--viewMode: 'years'--%>
+        <%--});--%>
+    <%--})--%>
+<%--</script>--%>
 
 
 </html>
