@@ -29,6 +29,12 @@ public class ExceptionInfoHandler {
         return logAndGetErrorInfo(req, e, false, ErrorType.DATA_NOT_FOUND);
     }
 
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErrorInfo handleError(HttpServletRequest req, IllegalArgumentException e){
+        return logAndGetErrorInfo(req, e, false, ErrorType.DATA_ERROR);
+    }
+
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {

@@ -112,6 +112,20 @@ public class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void testCreateInvalidData() throws Exception {
+        User expected = new User(null, "", "new@gmail.com", "n", 2300, Role.ROLE_USER);
+        ResultActions action = mockMvc.perform(post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isCreated())
+                .andDo(print());
+
+
+    }
+
+
+
+    @Test
     public void testGetAll() throws Exception {
         TestUtil.print(mockMvc.perform(get(REST_URL)
                 .with(userHttpBasic(ADMIN)))

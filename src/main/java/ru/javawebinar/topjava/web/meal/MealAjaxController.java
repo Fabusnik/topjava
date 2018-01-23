@@ -37,17 +37,20 @@ public class MealAjaxController extends AbstractMealController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) {
+    public void createOrUpdate(@Valid Meal meal, BindingResult result) {
         if (result.hasErrors()) {
             // TODO change to exception handler
-            return ValidationUtil.getErrorResponse(result);
+            //throw new IllegalArgumentException(result.getFieldError().getField()+ " " + result.getFieldError().getDefaultMessage());
+            throw new IllegalArgumentException(ValidationUtil.getErrorString(result));
+            //System.out.println();
+            //return ValidationUtil.getErrorResponse(result);
         }
         if (meal.isNew()) {
             super.create(meal);
         } else {
             super.update(meal, meal.getId());
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        //return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
